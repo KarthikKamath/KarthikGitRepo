@@ -6,7 +6,12 @@ public class HelloLambda {
     {
         System.out.println("Inside outer Thread: " + Thread.currentThread().getName());
         new Thread(() ->
-            System.out.println("Inside inner Thread: " + Thread.currentThread().getName())
+            System.out.println("Inside Iinner Thread: " + Thread.currentThread().getName())
         ).start();
+
+        Runnable run = () ->
+        System.out.println("Inside II inner Thread: " + Thread.currentThread().getName());
+        new Thread(run).start();
+
     }
 }
