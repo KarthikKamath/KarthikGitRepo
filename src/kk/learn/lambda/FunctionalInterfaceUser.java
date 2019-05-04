@@ -1,9 +1,6 @@
 package kk.learn.lambda;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class FunctionalInterfaceUser {
 
@@ -29,13 +26,56 @@ public class FunctionalInterfaceUser {
 
 
         // Producer category
-        Supplier<Person> createPerson1 = () -> new Person("John", 30);
+        Supplier<Person> createPerson = () -> new Person("Angelica", 30);
         Supplier<Person> createPerson2 = Person::new;
-        printPerson1.accept(createPerson1.get());
+        Person angelica = createPerson.get();
+        printPerson1.accept(angelica);
         printPerson1.accept(createPerson2.get());
 
         // Function category
         Function<Person, String> getPersonDetails = person -> person.toString();
-//        getPersonDetails.apply()
+        System.out.println(getPersonDetails.apply(danny));
+
+        BiFunction<Person, Integer, String >
+                updatePersonAgeAnfGetDetails = (person, newAge) -> {
+                                                    person.setAge(newAge);
+                                                    return person.toString();
+                                                };
+        System.out.println(updatePersonAgeAnfGetDetails.apply(danny, 40));
+
+        UnaryOperator<Person> makeSeniorCitizen = person ->
+        {
+            person.setName("Sr. " + person.getName());
+            person.setAge(60);
+            return person;
+        };
+        makeSeniorCitizen.apply(danny);
+        System.out.println(danny);
+
+        BinaryOperator<Person> createChild = (person1, person2) ->
+        {
+            Person child = new Person("Child of " + person1.getName() + " and " + person2.getName(), 1);
+            return child;
+        };
+        Person child = createChild.apply(danny, angelica);
+        System.out.println(child);
+
+        //Predicate category
+        Predicate<Person> isAdult = person ->
+        {
+            return person.getAge() > 17;
+        };
+        Predicate<Person> isSeniorCitizen = person ->
+        {
+        return person.getAge() > 59;
+        };
+        System.out.println("Is Danny adult: " + isAdult.test(danny));
+        System.out.println("Is Danny senior: " + isAdult.and(isSeniorCitizen).test(danny));
+        System.out.println("Is Angelica senior: " + isAdult.and(isSeniorCitizen).test(angelica));
+
+        BiPredicate<Person, Integer> isSuperSenior = (person, superAge) ->
+            isAdult.test(person) && person.getAge() >= superAge;
+        System.out.println("Is Danny super senior: " + isSuperSenior.test(danny, 80));
+
     }
 }
