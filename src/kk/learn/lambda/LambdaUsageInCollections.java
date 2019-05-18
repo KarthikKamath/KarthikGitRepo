@@ -1,6 +1,8 @@
 package kk.learn.lambda;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 public class LambdaUsageInCollections {
 
@@ -42,20 +44,64 @@ public class LambdaUsageInCollections {
         collectNamesInList.sort(reverseOrder.thenComparing(naturalOrder));
         collectNamesInList.forEach(System.out::println);
 
-        //.thenComparing(Comparator.reverseOrder())
-
         //MAP
+        System.out.println("-----\nMap");
+
+        Map<String, Integer> mapNameToAge = new HashMap<String, Integer>() {
+        {
+            put("Ritika", 5);
+            put("Rekha", 32);
+            put("Karthik", 35);
+        }};
         //forEach
+        BiConsumer<String, Integer> printMapEntry = (key, value) -> {
+            System.out.println(key + " is of age: " + value);
+        };
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\ngetOrDefault");
         //getOrDefault
-        //putIfPresent
-        //replace - 2 versions
-        //replaceAll
-        //remove
-        //compute
-        //computeIfAbsent
-        //computeIfPresent
-        //merge
+        System.out.println(mapNameToAge.getOrDefault("Unknown", -1));
+        mapNameToAge.forEach(printMapEntry);
 
+        System.out.println("-----\nputIfAbsent");
+        mapNameToAge.putIfAbsent("Unknown", 0);
+        mapNameToAge.forEach(printMapEntry);
 
+        System.out.println("-----\nreplace1");
+        mapNameToAge.replace("Unknown", 1);
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\nreplace2");
+        mapNameToAge.replace("Unknown", 1,2);
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\nreplaceAll");
+        mapNameToAge.replaceAll((name, age) -> age +10);
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\nremove");
+        mapNameToAge.remove("Unknown", 11);
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\ncompute");
+        mapNameToAge.compute("Unknown", (name, age) -> age +10 );
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\ncomputeIfAbsent");
+        mapNameToAge.computeIfAbsent("Unknown2", ( age) -> 50);
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\ncomputeIfPresent");
+        mapNameToAge.computeIfPresent("Unknown2", (name, age) -> 5);
+        mapNameToAge.forEach(printMapEntry);
+
+        System.out.println("-----\nMerge");
+
+        mapNameToAge.merge("KK", 50, (name, value) -> 50);
+        mapNameToAge.forEach(printMapEntry);
+
+        mapNameToAge.merge("Karthik", 50, (name, value) -> 55);
+        mapNameToAge.forEach(printMapEntry);
     }
 }
